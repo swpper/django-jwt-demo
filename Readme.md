@@ -1,4 +1,9 @@
-#### Run api service with
+#### Go into python venv env under direction: `django-jwt-demo` with(support Linux/Mac os only)
+```python
+source django-env/bin/activate
+```
+
+#### Run api service under direction: `django-jwt-demo` with
 ```python
 uvicorn data_api.main:app --host 0.0.0.0 --port 5555 --reload
 ```
