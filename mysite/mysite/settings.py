@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     "datacenter.apps.DatacenterConfig",
     "oauth2jwt.apps.Oauth2JwtConfig",
     "oauth2_provider",
+    "utils.apps.UtilsConfig"
 ]
 
 MIDDLEWARE = [
@@ -51,6 +52,7 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
+    "utils.middleware.JWTMiddleware"
 ]
 
 ROOT_URLCONF = "mysite.urls"
@@ -122,8 +124,5 @@ STATIC_URL = "static/"
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
-# os.environ['ID'] = 'SI4mjtBdQL7d4ilXB8zUFpQGtwPRAmtaLY5rhyaz'
-# os.environ['SECRET'] = 'pbkdf2_sha256$390000$9TglOifR28SQjCsoQihapU$K6TSckVASPrxM0ASFHofinJhcN76yZOYwsCvAuTfD6E='
-# os.environ['CREDENTIAL'] = 'U0k0bWp0QmRRTDdkNGlsWEI4elVGcFFHdHdQUkFtdGFMWTVyaHlhejpwYmtkZjJfc2hhMjU2JDM5MDAwMCQ5VGdsT2lmUjI4U1FqQ3NvUWloYXBVJEs2VFNja1ZBU1ByeE0wQVNGSG9maW5KaGNONzZ5Wk9Zd3NDdkF1VGZENkU9'
-
+AUTH_USER_MODEL='datacenter.Customer'
 

@@ -8,7 +8,7 @@ alias deactivate 'test $?_OLD_VIRTUAL_PATH != 0 && setenv PATH "$_OLD_VIRTUAL_PA
 # Unset irrelevant variables.
 deactivate nondestructive
 
-setenv VIRTUAL_ENV "/Users/swpper/Library/CloudStorage/OneDrive-共享的库-onedrive/Z-中科九章雷电/代码/练习/trial_django/django-env"
+setenv VIRTUAL_ENV "/Users/swpper/Library/CloudStorage/OneDrive-共享的库-onedrive/Z-jozzon/code/trial/trial_django/django-env"
 
 set _OLD_VIRTUAL_PATH="$PATH"
 setenv PATH "$VIRTUAL_ENV/bin:$PATH"

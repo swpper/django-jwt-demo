@@ -24,7 +24,7 @@ scope_base = ['r', 'w']
 
 def init_customer(Customer):
 
-    def gen_random_secret(n: int=20):
+    def gen_random_secret(n: int=8):
         candidate_chars = string.digits + string.ascii_letters
         secret = ''
         for i in range(n):
@@ -61,11 +61,14 @@ def init_customer(Customer):
         customers = []
         for i in range(n):
             customers.append({
-                'customer_name': f'customer_{i}',
-                'customer_secret': gen_random_secret(),
+                'username': f'customer{i}',
+                # 'password': gen_random_secret(),
+                'password': f'customer{i}',
+                'email': f'customer_{i}@example.com',
                 'resource_name': json.dumps(random.choice(resources_all)),
                 'scope': json.dumps(random.choice(scope_all)),
-                'update_date': bjtznow()
+                'update_date': bjtznow(),
+           
             })
         return customers
 
