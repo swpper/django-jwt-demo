@@ -81,6 +81,7 @@ class JWTMiddleware(MiddlewareMixin):
             print(self.token_type)
             if self.grant_type == 'client_credentials':
                 # 客户端模式
+                print('client mode')
                 self.is_query_token = True
                 self.resource_name = request_data.get('HTTP_RESOURCE_NAME', None)
                 self.client_id = request_data.get('HTTP_RESOURCE_NAME', None)
@@ -96,6 +97,7 @@ class JWTMiddleware(MiddlewareMixin):
                     return HttpResponse({'error': 'header缺少resource_name'})
             if self.grant_type == 'password':
                 # 密码模式
+                print('password mode')
                 self.is_query_token = True
                 self.resource_name = request_data.get('HTTP_RESOURCE_NAME', None)
         else:
@@ -105,6 +107,7 @@ class JWTMiddleware(MiddlewareMixin):
         # Code to be executed for each request/response after
         # the view is called.
 
+        print('middleware back')
         if response.status_code == 200:
             if self.token_type == 'jwt':
                 try:
