@@ -17,7 +17,7 @@ Application = get_application_model()
 
 def gen_authorization(client_id, client_secret):
     credential = "{0}:{1}".format(client_id, client_secret)
-    credential = base64.b64encode(credential.encode("utf-8"))
+    credential = base64.b64encode(credential.encode("utf-8")).decode("utf-8")
     return credential
 
 
@@ -47,7 +47,7 @@ def gen_jwt_token(secret, expire_minute: int=10, token_data: dict={}) -> str:
 
 class JWTMiddleware(MiddlewareMixin):
     '''
-    替换o/token路径的默认的token
+    
     '''
     def __init__(self, get_response):
         self.get_response = get_response
@@ -67,25 +67,22 @@ class JWTMiddleware(MiddlewareMixin):
         self.url_info = request.META.get('PATH_INFO', False)
         print(self.url_info)
         if self.url_info == '/o/token/':
-            print(request.body)
+            # print(request.body)
             try:
                 request_data = json.loads(request.body)
+                self.grant_type = request_data.get('grant_type', None)
+                self.token_type = request_data.get('token_type', None)
+                print("Request data:", request_data)
             except:
                 print('error load body')
-                return HttpResponse('error load body')
-            self.grant_type = request_data.get('grant_type', None)
-            self.token_type = request_data.get('token_type', None)
-            print("Request data:", request_data)
             
-            print(self.grant_type)
-            print(self.token_type)
             if self.grant_type == 'client_credentials':
                 # 客户端模式
                 print('client mode')
                 self.is_query_token = True
-                self.resource_name = request_data.get('HTTP_RESOURCE_NAME', None)
-                self.client_id = request_data.get('HTTP_RESOURCE_NAME', None)
-                self.client_secret = request_data.get('HTTP_RESOURCE_NAME', None)
+                self.resource_name = request_data.get('resource_name', None)
+                self.client_id = request_data.get('client_id', None)
+                self.client_secret = request_data.get('client_secret', None)
 
                 if self.resource_name:
                     credential = gen_authorization(self.client_id, self.client_secret)
@@ -94,15 +91,14 @@ class JWTMiddleware(MiddlewareMixin):
                     headers_temp['Authorization'] = f"Basic {credential}"
                     setattr(request, 'header', headers_temp)
                 else:
-                    return HttpResponse({'error': 'header缺少resource_name'})
-            if self.grant_type == 'password':
+                    return HttpResponse(json.dumps({'error': 'header缺少resource_name'}), status_code=400)
+            elif self.grant_type == 'password':
                 # 密码模式
                 print('password mode')
                 self.is_query_token = True
                 self.resource_name = request_data.get('HTTP_RESOURCE_NAME', None)
-        else:
-            return HttpResponse({'error': 'header缺少grant_type'})
 
+        print(request.header)
         response = self.get_response(request)
         # Code to be executed for each request/response after
         # the view is called.
