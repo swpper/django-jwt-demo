@@ -67,7 +67,12 @@ class JWTMiddleware(MiddlewareMixin):
         self.url_info = request.META.get('PATH_INFO', False)
         print(self.url_info)
         if self.url_info == '/o/token/':
-            request_data = json.loads(request.body)
+            print(request.body)
+            try:
+                request_data = json.loads(request.body)
+            except:
+                print('error load body')
+                return HttpResponse('error load body')
             self.grant_type = request_data.get('grant_type', None)
             self.token_type = request_data.get('token_type', None)
             print("Request data:", request_data)

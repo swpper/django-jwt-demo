@@ -24,7 +24,7 @@ SECRET_KEY = "django-insecure-n150@jokndc@ns!flju-1o80b-ke9g-@1law1_0gli=y)xlzv2
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
-
+ALLOWED_HOSTS = ['*']
 
 # Application definition
 
@@ -35,12 +35,9 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
-    "polls.apps.PollsConfig",
     "datacenter.apps.DatacenterConfig",
     "oauth2jwt.apps.Oauth2JwtConfig",
     "oauth2_provider",
-    "utils.apps.UtilsConfig",
-    "rest_framework",
 ]
 
 MIDDLEWARE = [
@@ -125,13 +122,13 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 AUTH_USER_MODEL='datacenter.Customer'
 
-ALLOWED_HOSTS = ['*',]
 
-# OAUTH2_PROVIDER = {
-#     # 'ACCESS_TOKEN_EXPIRE_SECONDS': 3600,
-#     # 'REFRESH_TOKEN_EXPIRE_SECONDS': 3600,
-#     # 'SCOPES': {'read': 'Read scope', 'write': 'Write scope'},
-#     # 'AUTHORIZATION_CODE_EXPIRE_SECONDS': 60,
-#     # 'REQUEST_APPROVAL_PROMPT': 'auto',
-#     # 'OAUTH2_BACKEND_CLASS': 'oauth2_provider.oauth2_backends.JSONOAuthLibCore'
-# }
+
+OAUTH2_PROVIDER = {
+    'ACCESS_TOKEN_EXPIRE_SECONDS': 3600,
+    'REFRESH_TOKEN_EXPIRE_SECONDS': 3600,
+    # 'SCOPES': {'read': 'Read scope', 'write': 'Write scope'},
+    'AUTHORIZATION_CODE_EXPIRE_SECONDS': 60,
+    # 'REQUEST_APPROVAL_PROMPT': 'auto',
+    # 'OAUTH2_BACKEND_CLASS': 'oauth2_provider.oauth2_backends.JSONOAuthLibCore'
+}
