@@ -1,0 +1,6 @@
+django
+fastapi
+uvicorn
+django-oauth-toolkit
+pyjwt
+djangorestframework-simplejwt
