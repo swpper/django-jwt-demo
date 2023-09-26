@@ -41,7 +41,8 @@ INSTALLED_APPS = [
     "datacenter.apps.DatacenterConfig",
     "oauth2jwt.apps.Oauth2JwtConfig",
     "oauth2_provider",
-    "utils.apps.UtilsConfig"
+    "utils.apps.UtilsConfig",
+    "rest_framework",
 ]
 
 MIDDLEWARE = [
@@ -126,3 +127,12 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 AUTH_USER_MODEL='datacenter.Customer'
 
+ALLOWED_HOSTS = ['*']
+
+OAUTH2_PROVIDER = {
+    # 'ACCESS_TOKEN_EXPIRE_SECONDS': 3600,
+    # 'REFRESH_TOKEN_EXPIRE_SECONDS': 3600,
+    # 'SCOPES': {'read': 'Read scope', 'write': 'Write scope'},
+    # 'AUTHORIZATION_CODE_EXPIRE_SECONDS': 60,
+    # 'REQUEST_APPROVAL_PROMPT': 'auto',
+}

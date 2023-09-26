@@ -2,15 +2,18 @@ import os
 import json
 import string
 import random
+from datetime import datetime, timezone, timedelta
 
 import django
 import init_django
+from django.db import models
+
 from polls.models import Question, Choice
 from datacenter.models import Customer, Resource
 
-from common import bjtz, bjtznow
-from django.db import models
 
+def bjtznow():
+    return datetime.now(tz=timezone(timedelta(hours=8)))
 
 resources = {
     'wf': 'asidhu123bbkbkj2bi34i2u3b4b',
@@ -86,5 +89,5 @@ def init_resource(Resource):
 
 
 if __name__ == '__main__':    
-    init_customer(Customer)
-    # init_resource(Resource)
+    # init_customer(Customer)
+    init_resource(Resource)

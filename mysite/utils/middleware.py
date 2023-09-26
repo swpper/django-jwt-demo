@@ -5,11 +5,11 @@ import json
 import traceback
 from datetime import datetime, timedelta
 
+import jwt
 from django.utils.deprecation import MiddlewareMixin
 from django.shortcuts import HttpResponse
-import oauth2_provider
 from oauth2_provider.models import get_application_model, Application
-import jwt
+from datacenter.models import Resource
 
 
 Application = get_application_model()
@@ -47,9 +47,7 @@ def gen_jwt_token(secret, expire_minute: int=10, token_data: dict={}) -> str:
 
 class JWTMiddleware(MiddlewareMixin):
     '''
-    - 确认请求为获取token请求
-    - 收集生成JWT token的数据
-    - 生成token返回
+    替换o/token路径的默认的token
     '''
     def __init__(self, get_response):
         self.get_response = get_response
@@ -64,36 +62,56 @@ class JWTMiddleware(MiddlewareMixin):
         # Code to be executed for each request before
         # the view (and later middleware) are called.
 
-        self.user_name = request.META.get('username', False)
         self.url_info = request.META.get('PATH_INFO', False)
-        if self.url_info == '/o/token/':
+        if self.url_info == '/o/password/':
+            # 客户端模式
             self.is_query_token = True
-            self.client_name = request.META.get('HTTP_CLIENT_NAME', False)
-            if self.client_name:
-                try:
-                    client = Application.objects.get(name=self.client_name)
-                except:
-                    print('获取client信息出错')
-                    print(traceback.format_exc())
-                    return HttpResponse({'error': '获取client信息出错'})
-                
-                self.client_id = client.client_id
-                self.client_secret = client.client_secret
+            self.resource_name = request.META.get('HTTP_RESOURCE_NAME', False)
+            self.client_id = request.META.get('HTTP_RESOURCE_NAME', False)
+            self.client_secret = request.META.get('HTTP_RESOURCE_NAME', False)
+
+            if self.resource_name:
                 credential = gen_authorization(self.client_id, self.client_secret)
-                
                 headers = request.headers
                 headers_temp = vars(headers)
                 headers_temp['Authorization'] = f"Basic {credential}"
                 setattr(request, 'header', headers_temp)
+            else:
+                return HttpResponse({'error': 'header缺少resource_name'})
+        if self.url_info == '/o/password/':
+            # 客户端模式
+            self.is_query_token = True
+            self.resource_name = request.META.get('HTTP_RESOURCE_NAME', False)
+            self.client_id = request.META.get('HTTP_RESOURCE_NAME', False)
+            self.client_secret = request.META.get('HTTP_RESOURCE_NAME', False)
+
+            if self.resource_name:
+                credential = gen_authorization(self.client_id, self.client_secret)
+                headers = request.headers
+                headers_temp = vars(headers)
+                headers_temp['Authorization'] = f"Basic {credential}"
+                setattr(request, 'header', headers_temp)
+            else:
+                return HttpResponse({'error': 'header缺少resource_name'})
                 
         response = self.get_response(request)
         # Code to be executed for each request/response after
         # the view is called.
 
         if self.is_query_token:
-            digest = sha256(self.client_secret)
+            try:
+                resource = Resource.objects.filter(resource_name=self.resource_name)[0]
+            except:
+                print('获取resource信息出错')
+                print(traceback.format_exc())
+                setattr(response, 'content', json.dumps({'error': 500}))
+                setattr(response, 'status_code', 500)
+                return response
+            
+            digest = sha256(resource.resource_secret)
             jwt_token = gen_jwt_token(digest, expire_minute=20, token_data={
-                'client_name': self.client_name,
+                'client_id': self.client_id,
+                'resource_name': self.resource_name,
                 'scope': self.scope
             })
 

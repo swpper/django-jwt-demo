@@ -1,15 +1,14 @@
 
 import json
 import hashlib
-import jwt
 from datetime import datetime, timedelta
 
+import jwt
 from django.shortcuts import render
 from django.http import HttpResponse, Http404, JsonResponse
 from django.template import loader
 
 from datacenter.models import Customer, Resource
-
 
 
 content_template = {
@@ -44,7 +43,7 @@ def sha256(secret: str, salt='iamsalt'):
 def gen_token(request, exp_minute: int=10) -> str:
     # secret
     resource_name = request.headers['resource_name']
-    resource = Resource.objects.get(pk=resource_name)
+    resource = Resource.objects.get(resource_name=resource_name)
     secret = resource.resource_secret
     digest = sha256(secret)
 
@@ -65,6 +64,9 @@ def gen_token(request, exp_minute: int=10) -> str:
 
 
 def check_query_token_request(request) -> dict:
+    '''手动检查认证信息'''
+    if request.method != 'POST':
+        return {'result': False, 'reason': 'Only support POST method.'}
 
     customer_name = request.META.get('HTTP_CUSTOMER_NAME', 'unkown')
     customer_secret = request.META.get('HTTP_CUSTOMER_SECRET', 'unkown')
@@ -73,14 +75,15 @@ def check_query_token_request(request) -> dict:
 
     print(customer_name, customer_secret, resource_name, scope)
 
-    customer = Customer.objects.get(pk=customer_name)
-
-    if customer_secret == customer.customer_secret:
+    customer = Customer.objects.get(username=customer_name)
+    print(customer)
+    if customer_secret == customer.password:
         if resource_name in json.loads(customer.resource_name):
-            if scope in json.loads(customer.scope):
-                return {'result': True, 'reason': ''}
-            else:
-                return {'result': False, 'reason': 'Invalid scope.'}
+            ...
+            # if scope in json.loads(customer.scope):
+            #     return {'result': True, 'reason': ''}
+            # else:
+            #     return {'result': False, 'reason': 'Invalid scope.'}
         else:
             return {'result': False, 'reason': 'Invalid resource_id.'}
     else:
@@ -93,6 +96,8 @@ def my_auth(request):
         通过，生成token并返回
         不通过，返回相应的错误信息
     '''
+    # TODO: Forbidden (CSRF token missing.): /myoauth/my_auth
+    # 无法处理csrf令牌问题,改成视同oauth toolkit,利用密码模式认证返回jwt token
     result = check_query_token_request(request)
 
     if result['result']:
@@ -110,6 +115,6 @@ def my_auth(request):
         return HttpResponse(status=401, content=content)
 
 
-def tookit_auth(request):
+def test_auth(request):
     
     return HttpResponse('Hello world, tookit_auth')

@@ -18,8 +18,8 @@ class ResourceId(models.TextChoices):
 
 class Customer(AbstractUser):
         
-    # username = models.CharField(max_length=50, primary_key=True)
-    # password = models.CharField(max_length=100)
+    username = models.CharField(max_length=50, primary_key=True)
+    password = models.CharField(max_length=100)
     resource_name = models.CharField(max_length=50, verbose_name='资源权限')   # JSON-serialized  list
     scope = models.CharField(max_length=50, verbose_name='scope')    # JSON-serialized  list
     update_date = models.DateTimeField('update date',
