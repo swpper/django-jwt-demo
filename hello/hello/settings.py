@@ -189,7 +189,8 @@ SIMPLE_JWT = {
     # 包含JWT的HTTP请求头的名称。默认为"HTTP_AUTHORIZATION"
     "AUTH_HEADER_NAME": "HTTP_AUTHORIZATION", 
      # 用户模型中用作用户ID的字段。默认为"id"。
-    "USER_ID_FIELD": "id",
+    # "USER_ID_FIELD": "id",    # 推荐，单一，持久
+    "USER_ID_FIELD": "username",    # 不推荐，暂时使用
      # JWT负载中包含用户ID的声明。默认为"user_id"。
     "USER_ID_CLAIM": "user_id",
     
@@ -202,7 +203,7 @@ SIMPLE_JWT = {
     "TOKEN_TYPE_CLAIM": "token_type",
     # 用于指定可以使用的用户模型类。默认为"rest_framework_simplejwt.models.TokenUser"。
     # "TOKEN_USER_CLASS": "rest_framework_simplejwt.models.TokenUser",
-    "TOKEN_USER_CLASS": "rest_framework_simplejwt.models.TokenUser",
+    "TOKEN_USER_CLASS": "datacenter.Customer",
 
     # JWT负载中包含JWT ID的声明。默认为"jti"。
     "JTI_CLAIM": "jti",
