@@ -154,11 +154,11 @@ OAUTH2_PROVIDER = {
     # 'OAUTH2_BACKEND_CLASS': 'oauth2_provider.oauth2_backends.JSONOAuthLibCore'
 }
 
-# REST_FRAMEWORK = {
-#     'DEFAULT_AUTHENTICATION_CLASSES': (
-#         'rest_framework_simplejwt.authentication.JWTAuthentication',
-#     )
-# }
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+    )
+}
 
 # JWT配置
 SIMPLE_JWT = {
@@ -168,9 +168,9 @@ SIMPLE_JWT = {
     # 对于大部分情况，设置以上两项就可以了，以下为默认配置项目，可根据需要进行调整
     
     # 是否自动刷新Refresh Token
-    'ROTATE_REFRESH_TOKENS': False,  
+    'ROTATE_REFRESH_TOKENS': True,  
     # 刷新Refresh Token时是否将旧Token加入黑名单，如果设置为False，则旧的刷新令牌仍然可以用于获取新的访问令牌。需要将'rest_framework_simplejwt.token_blacklist'加入到'INSTALLED_APPS'的配置中
-    'BLACKLIST_AFTER_ROTATION': False,  
+    'BLACKLIST_AFTER_ROTATION': True,  
     'ALGORITHM': 'HS256',  # 加密算法
     'SIGNING_KEY': SECRET_KEY,  # 签名密匙，这里使用Django的SECRET_KEY
 
@@ -201,6 +201,7 @@ SIMPLE_JWT = {
     # JWT负载中包含令牌类型的声明。默认为"token_type"。
     "TOKEN_TYPE_CLAIM": "token_type",
     # 用于指定可以使用的用户模型类。默认为"rest_framework_simplejwt.models.TokenUser"。
+    # "TOKEN_USER_CLASS": "rest_framework_simplejwt.models.TokenUser",
     "TOKEN_USER_CLASS": "rest_framework_simplejwt.models.TokenUser",
 
     # JWT负载中包含JWT ID的声明。默认为"jti"。
