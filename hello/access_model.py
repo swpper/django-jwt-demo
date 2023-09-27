@@ -7,9 +7,14 @@ from datetime import datetime, timezone, timedelta
 import django
 import init_django
 from django.db import models
+from django.contrib.auth.hashers import make_password, check_password
 
 from datacenter.models import Customer, Resource
 
+
+# pwd='4562154'
+# mpwd=make_password(pwd,None,'pbkdf2_sha256')  # 创建django密码，第三个参数为加密算法
+# pwd_bool=check_password(pwd,mpwd)# 返回的是一个bool类型的值，验证密码正确与否
 
 def bjtznow():
     return datetime.now(tz=timezone(timedelta(hours=8)))
@@ -65,7 +70,7 @@ def init_customer():
             customers.append({
                 'username': f'customer{i}',
                 # 'password': gen_random_secret(),
-                'password': f'customer{i}',
+                'password': make_password(f'customer{i}', None, 'pbkdf2_sha256'),
                 'email': f'customer{i}@example.com',
                 'resource_name': json.dumps(random.choice(resources_all)),
                 'scope': json.dumps(random.choice(scope_all)),
@@ -89,5 +94,5 @@ def init_resource():
 
 
 if __name__ == '__main__':    
-    # init_customer()
-    init_resource()
+    init_customer()
+    # init_resource()

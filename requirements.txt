@@ -3,4 +3,5 @@ fastapi
 uvicorn
 django-oauth-toolkit
 pyjwt
-djangorestframework-simplejwt
+djangorestframework-simplejwt[crypto]
+# https://pypi.tuna.tsinghua.edu.cn/simple
