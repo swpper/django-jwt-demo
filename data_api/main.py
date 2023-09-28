@@ -14,8 +14,10 @@ from data_api import init_api
 
 resource_name = os.environ['resource_name']
 resource_secret = os.environ['resource_secret']
+public_key = resource_secret
 
-print(resource_name, resource_secret)
+
+# print(resource_name, resource_secret)
 
 app = FastAPI()
 
@@ -44,6 +46,26 @@ def unverified_response(description):
     )
 
 def verify_token(token: str=Header(None, convert_underscores=False)) -> bool:
+
+    # print('token', token, type(token))
+    if token is None:
+        return unverified_response('no token')
+
+    try:
+        de_token = jwt.decode(token, key=public_key, algorithms=['RS256'])
+        # print(de_token)
+        return True
+    except jwt.ExpiredSignatureError as e:
+        # traceback.print_exc()
+        # print('expired token')
+        return unverified_response('expired token')
+    except jwt.InvalidTokenError:
+        # print('invalid token')
+        # traceback.print_exc()
+        return unverified_response('invalid token')
+
+
+def verify_token_rs256(token: str=Header(None, convert_underscores=False)) -> bool:
 
     # print('token', token, type(token))
     if token is None:
