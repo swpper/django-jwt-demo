@@ -42,7 +42,8 @@ INSTALLED_APPS = [
     'oauth2_provider',
     'rest_framework_simplejwt',
     # 下面这个app用于刷新refresh_token后，将旧的加到到blacklist时使用
-    'rest_framework_simplejwt.token_blacklist'
+    'rest_framework_simplejwt.token_blacklist',
+    'simplejwtapp'
 ]
 
 MIDDLEWARE = [
@@ -189,8 +190,8 @@ SIMPLE_JWT = {
     # 包含JWT的HTTP请求头的名称。默认为"HTTP_AUTHORIZATION"
     "AUTH_HEADER_NAME": "HTTP_AUTHORIZATION", 
      # 用户模型中用作用户ID的字段。默认为"id"。
-    # "USER_ID_FIELD": "id",    # 推荐，单一，持久
-    "USER_ID_FIELD": "username",    # 不推荐，暂时使用
+    # "USER_ID_FIELD": "id",    # 推荐,id是单独唯一的键,持久,username改变不影响
+    "USER_ID_FIELD": "username",    # 不推荐,暂时使用,username可能经常更改,旧的username可能依然有效
      # JWT负载中包含用户ID的声明。默认为"user_id"。
     "USER_ID_CLAIM": "user_id",
     

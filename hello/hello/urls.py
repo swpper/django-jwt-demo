@@ -22,14 +22,17 @@ from rest_framework_simplejwt.views import (
     TokenRefreshView,
     TokenVerifyView
 )
+from simplejwtapp.views import MyObtainTokenPairView
 
 urlpatterns = [
     path('admin/', admin.site.urls),
 
     path('o/', include('oauth2_provider.urls', namespace='oauth2_provider')),
 
-    path('api/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
+    # path('api/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
     path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
     # 下面这个是用来验证token的，根据需要进行配置
     # path('api/token/verify/', TokenVerifyView.as_view(), name='token_verify'),
+
+    path('api/token/', MyObtainTokenPairView.as_view(), name='token_obtain_pair')
 ]
