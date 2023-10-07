@@ -51,8 +51,9 @@ def verify_token(token: str=Header(None, convert_underscores=False)) -> bool:
     if token is None:
         return unverified_response('no token')
 
+    digest = sha256(resource_secret)
     try:
-        de_token = jwt.decode(token, key=public_key, algorithms=['RS256'])
+        de_token = jwt.decode(token, key=digest, algorithms=['HS256'])
         # print(de_token)
         return True
     except jwt.ExpiredSignatureError as e:
@@ -71,10 +72,8 @@ def verify_token_rs256(token: str=Header(None, convert_underscores=False)) -> bo
     if token is None:
         return unverified_response('no token')
 
-    # 尝试用jwt解析
-    digest = sha256(resource_secret)
     try:
-        de_token = jwt.decode(token, key=digest, algorithms=['HS256'])
+        de_token = jwt.decode(token, key=public_key, algorithms=['RS256'])
         # print(de_token)
         return True
     except jwt.ExpiredSignatureError as e:
