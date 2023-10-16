@@ -5,4 +5,5 @@ uvicorn
 django-oauth-toolkit
 pyjwt
 djangorestframework-simplejwt[crypto]
-
+pycryptodome
+pycryptodomex

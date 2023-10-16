@@ -1,9 +1,12 @@
 import string
 import random
+import hashlib
 import datetime
 
 import jwt
 from Crypto.PublicKey import RSA
+from cryptography.hazmat.primitives import serialization
+from cryptography.hazmat.primitives.asymmetric import rsa
 
 
 def gen_random_secret(n: int=20):
@@ -21,6 +24,39 @@ def generate_rsa_keypair():
     return {'private_key': private_key, 'public_key': public_key}
 
 
+def gen_rsa_pkcs8():
+
+    # 生成RSA密钥对
+    private_key = rsa.generate_private_key(
+        public_exponent=65537,
+        key_size=2048
+    )
+    public_key = private_key.public_key()
+
+    # 将私钥转换为PKCS8格式
+    private_key_pkcs8 = private_key.private_bytes(
+        encoding=serialization.Encoding.PEM,
+        format=serialization.PrivateFormat.PKCS8,
+        encryption_algorithm=serialization.NoEncryption()
+    )
+
+    # 将公钥转换为PKCS8格式
+    public_key_pkcs8 = public_key.public_bytes(
+        encoding=serialization.Encoding.PEM,
+        format=serialization.PublicFormat.PKCS1
+    )
+    return {'private_key': private_key_pkcs8, 'public_key': public_key_pkcs8}
+
+
+def sha256(secret: str, salt='iamsalt'):
+    if salt:
+        salt = str(salt).encode('utf-8')
+        sha256 = hashlib.sha256(salt)   # add salt
+    else:
+        sha256 = hashlib.sha256()   # add salt
+    sha256.update(secret.encode('utf-8'))
+    digest = sha256.hexdigest()
+    return digest
 
 
 def encode_jwt(payload, private_key):
