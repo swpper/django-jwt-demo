@@ -79,20 +79,20 @@ if __name__ == '__main__':
     'exp': datetime.datetime.utcnow() + datetime.timedelta(days=1)
     }
 
-    rsa_key = generate_rsa_keypair()
-    private_key = rsa_key['private_key'].export_key()
-    public_key = rsa_key['public_key'].export_key()
-    print(private_key)
-    print(public_key)
+    # rsa_key = generate_rsa_keypair()
+    # private_key = rsa_key['private_key'].export_key()
+    # public_key = rsa_key['public_key'].export_key()
+    # print(private_key)
+    # print(public_key)
 
-    encoded_jwt = encode_jwt(payload, private_key)
-    print(encoded_jwt)
-
-
-    decoded_jwt = decode_jwt(encoded_jwt, public_key)
-    print(decoded_jwt)
+    # encoded_jwt = encode_jwt(payload, private_key)
+    # print(encoded_jwt)
 
 
+    # decoded_jwt = decode_jwt(encoded_jwt, public_key)
+    # print(decoded_jwt)
 
-
+    rsa_key = gen_rsa_pkcs8()
+    print(rsa_key['private_key'].decode('utf-8'))
+    print(rsa_key['public_key'].decode('utf-8'))
 

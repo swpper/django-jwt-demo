@@ -14,4 +14,6 @@ os.environ['resource_secret'] = 'asidhu123bbkbkj2bi34i2u3b4b'
 rsa_key = gen_rsa_pkcs8()
 os.environ['private_key'] = rsa_key['private_key'].decode('utf-8')
 os.environ['public_key'] = rsa_key['public_key'].decode('utf-8')
+print(os.environ['private_key'])
+print(os.environ['public_key'])
 
